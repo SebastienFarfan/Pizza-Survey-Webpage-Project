@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Ball Pizza Survey</title>
+    <!-- Tailwind is loaded here, but all custom CSS and JS are INLINE below -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* All CSS styles from rb_reset.css, rb_forms.css, and rb_forms_txt.css are combined here */
+        @charset "utf-8";
+        
+        /* --- General Reset Styles --- */
+        article, aside, figcaption, figure, footer, header, main, nav, section {
+            display: block;
+        }
+        
+        address, article, aside, blockquote, body, cite, 
+        div, dl, dt, dd, em, figcaption, figure, footer, 
+        h1, h2, h3, h4, h5, h6, header, html, img, 
+        li, main, nav, nav a, ol, p, section, span, ul,
+        table, tr, td, th, col, colgroup {
+           margin: 0;
+           padding: 0;
+           border: 0;
+           font-size: 100%;
+           background: transparent;
+           -webkit-box-sizing: border-box;
+           -moz-box-sizing: border-box;
+           box-sizing: border-box;  
+        }
+
+        body {
+            line-height: 1.2em;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: rgb(246, 226, 172); /* Primary Background */
+            color: rgb(75, 75, 75);
+        }
+
+        ul, ol { list-style: none; }
+        
+        /* --- Layout & Typography Styles --- */
+        header {
+            background-color: rgb(200, 48, 20); /* Red Header */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 5px solid rgb(150, 36, 15);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px 0;
+            background-color: rgb(75, 75, 75);
+            color: white;
+            font-size: 0.9em;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Form Layout Styles (from rb_forms.css) --- */
+        form#survey {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-flow: row wrap;
+            flex-flow: row wrap;
+        }
+
+        form#survey > fieldset {
+            background-color: rgb(241, 232, 181); /* Fieldset background */
+            border-radius: 20px;
+            -webkit-flex: 1 1 300px;
+            flex: 1 1 300px;
+            font-size: 0.85em;
+            padding: 15px;
+            margin: 15px;
+            border: 1px solid rgb(220, 210, 160);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        legend {
+            background-color: rgb(255, 120, 0); /* Orange Legend */
+            color: white;
+            border-radius: 10px;
+            padding: 5px 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        div.formRow {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-flex-flow: row wrap;
+            flex-flow: row wrap;
+            margin: 15px 0px;
+            align-items: center;
+        }
+
+        div.formRow > * {
+            -webkit-flex: 1 1 150px;
+            flex: 1 1 150px;
+        }
+        
+        div.formRow > label {
+            font-weight: bold;
+            color: rgb(50, 50, 50);
+            padding-right: 10px;
+        }
+
+        /* --- Text Input Styles (from rb_forms_txt.css) --- */
+        input[type="text"], input[type="tel"], input[type="email"], input[type="date"], input[type="number"], select, textarea {
+            background-color: white;
+            border: 1px solid rgb(190, 190, 190);
+            border-radius: 5px;
+            padding: 8px 10px;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px; /* Limit width for better usability */
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        /* --- Submit Button Styling --- */
+        input[type="submit"] {
+            background-color: rgb(200, 48, 20);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 4px 0 rgb(150, 36, 15);
+            margin: 20px auto 10px auto;
+            text-transform: uppercase;
+            display: block; /* Center the button */
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgb(220, 60, 30);
+        }
+        
+        input[type="submit"]:active {
+            box-shadow: 0 1px 0 rgb(150, 36, 15);
+            transform: translateY(3px);
+        }
+        
+        /* --- Custom Success Message Box Styling (replacing alert()) --- */
+        #success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            font-weight: bold;
+        }
+        
+        #success-message.show {
+            opacity: 1;
+        }
+
+        /* --- Media Query for Mobile Responsiveness --- */
+        @media (max-width: 600px) {
+            form#survey > fieldset {
+                -webkit-flex: 1 1 100%;
+                flex: 1 1 100%;
+                margin: 10px 0;
+            }
+            div.formRow {
+                -webkit-flex-flow: column;
+                flex-flow: column;
+                align-items: flex-start;
+            }
+            div.formRow > label {
+                margin-bottom: 5px;
+            }
+            div.formRow > * {
+                -webkit-flex: 1 1 100%;
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Red Ball Pizza Survey</h1>
+    </header>
+
+    <main class="p-4">
+        <div id="success-message" role="alert">
+            No invalid data detected. Form data retained for testing.
+        </div>
+
+        <form id="survey" method="post" action="survey.html">
+            <fieldset>
+                <legend>Contact Information</legend>
+                <div class="formRow">
+                    <label for="name">Name*</label>
+                    <input name="name" id="name" type="text" placeholder="First and Last Name" required />
+                </div>
+                <div class="formRow">
+                    <label for="address">Address</label>
+                    <input name="address" id="address" type="text" placeholder="Street Address" />
+                </div>
+                <div class="formRow">
+                    <label for="city">City*</label>
+                    <input name="city" id="city" type="text" required placeholder="City" />
+                </div>
+                <div class="formRow">
+                    <label for="state">State*</label>
+                    <input name="state" id="state" type="text" required pattern="[A-Za-z]{2}" placeholder="Two-letter code" />
+                </div>
+                <div class="formRow">
+                    <label for="zip">Postal Code*</label>
+                    <!-- Uses the regex pattern from rb_regex.txt: ^\d{5}(-\d{4})?$ -->
+                    <input name="zip" id="zip" type="text" required pattern="^\d{5}(-\d{4})?$" placeholder="e.g., 12345 or 12345-6789" />
+                </div>
+                <div class="formRow">
+                    <label for="phone">Phone*</label>
+                    <!-- Uses the simplified regex pattern for phone numbers -->
+                    <input name="phone" id="phone" type="tel" required pattern="^(\(?\d{3}\)?\s*)?\d{3}[-]?\d{4}$" placeholder="e.g., (555) 555-1234" />
+                </div>
+                <div class="formRow">
+                    <label for="email">E-mail*</label>
+                    <input name="email" id="email" type="email" required placeholder="name@domain.com" />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Pizza Preferences</legend>
+                <div class="formRow">
+                    <label for="date">Last Order Date</label>
+                    <input name="date" id="date" type="date" />
+                </div>
+                <div class="formRow">
+                    <label for="size">Favorite Size</label>
+                    <select name="size" id="size">
+                        <option value="S">Small (10")</option>
+                        <option value="M">Medium (12")</option>
+                        <option value="L" selected>Large (14")</option>
+                        <option value="XL">Extra Large (16")</option>
+                    </select>
+                </div>
+                <div class="formRow">
+                    <label>Favorite Crust</label>
+                    <div class="flex flex-col space-y-1 mt-1">
+                        <label><input type="radio" name="crust" value="Thin" checked /> Thin</label>
+                        <label><input type="radio" name="crust" value="Thick" /> Thick</label>
+                        <label><input type="radio" name="crust" value="Deep Dish" /> Deep Dish</label>
+                    </div>
+                </div>
+                <div class="formRow">
+                    <label>Favorite Toppings</label>
+                    <div class="flex flex-col space-y-1 mt-1">
+                        <label><input type="checkbox" name="topping" value="Pepperoni" checked /> Pepperoni</label>
+                        <label><input type="checkbox" name="topping" value="Mushroom" /> Mushroom</label>
+                        <label><input type="checkbox" name="topping" value="Sausage" /> Sausage</label>
+                        <label><input type="checkbox" name="topping" value="Onion" /> Onion</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>General Feedback</legend>
+                <div class="formRow">
+                    <label for="comments">Your comments on our service:</label>
+                    <textarea name="comments" id="comments" rows="5" placeholder="Tell us what you think..."></textarea>
+                </div>
+
+                <div class="formRow">
+                    <label for="rating">Overall Rating (1-5)</label>
+                    <input name="rating" id="rating" type="number" min="1" max="5" placeholder="3" />
+                </div>
+                
+                <div class="formRow">
+                    <label for="suggestion">Future Suggestion:</label>
+                    <input name="suggestion" id="suggestion" type="text" placeholder="New menu item, service improvement, etc." />
+                </div>
+            </fieldset>
+
+            <input type="submit" value="Submit Survey" />
+        </form>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Red Ball Pizza. All rights reserved.</p>
+    </footer>
+
+    <script>
+        /* The entire JavaScript from rb_formsubmit.js is embedded here, 
+           and the alert() has been replaced with a custom message box. */
+        
+        window.onload = setForm;
+
+        function setForm() {
+            // Check if the form exists before attaching listener
+            const form = document.getElementById('survey');
+            if (!form) return console.error("Survey form not found.");
+
+            const messageBox = document.getElementById('success-message');
+
+            form.onsubmit = function(event) {
+                // Prevent the default form submission to keep the user on the page
+                event.preventDefault(); 
+
+                if (this.checkValidity()) {
+                    // Show the custom success message (replacing the old alert)
+                    messageBox.style.display = 'block';
+                    setTimeout(() => {
+                        messageBox.classList.add('show');
+                    }, 10); // Short delay to trigger fade-in CSS transition
+
+                    // Hide the message after 3 seconds
+                    setTimeout(() => {
+                        messageBox.classList.remove('show');
+                        setTimeout(() => {
+                            messageBox.style.display = 'none'; // Fully remove from display after fade-out
+                        }, 500);
+                    }, 3000);
+                    
+                    // The original JS returned false to stop the form from navigating away, 
+                    // which is achieved here by event.preventDefault() and returning early.
+                } else {
+                    // If validation fails, the browser handles showing the default error messages
+                    // near the invalid fields. We don't need a special notification.
+                    console.log("Form validation failed. Browser error messages should be visible.");
+                }
+
+                return false; // Ensures no accidental submission happens
+            }
+        }
+    </script>
+</body>
+</html>
